@@ -25,16 +25,16 @@ class FileController extends Controller
         }
 
         $storeFileName = time() . '_' . $file->getClientOriginalName();
-        $path          = $file->storeAs(self::UPLOAD_DIR, $storeFileName, 'public');
-        $url           = Storage::disk('public')->url($path);
+        $path          = $file->storeAs(self::UPLOAD_DIR, $storeFileName, 's3');
+        $url           = Storage::disk('s3')->url($path);
 
         $file = new File([
             'file_name'       => $file->getClientOriginalName(),
-            'store_path'      => storage_path() . '/' . self::UPLOAD_DIR,
+            'store_path'      => self::UPLOAD_DIR,
             'store_file_name' => $storeFileName,
             'mime_type'       => $file->getMimeType(),
             'size'            => $file->getSize(),
-            'disk'            => 'public',
+            'disk'            => 's3',
             'url'             => $url,
             'is_public'       => true,
         ]);
@@ -50,5 +50,13 @@ class FileController extends Controller
         return view('file.list', [
             'files' => $files
         ]);
+    }
+
+    public function getFile(File $file)
+    {
+        if (Storage::disk('s3')->exists($file->store_path . '/' . $file->store_file_name)) {
+            return Storage::disk('s3')->download($file->store_path . '/' .$file->store_file_name);
+            //return Storage::disk('s3')->get($file->store_path . '/' .$file->store_file_name);
+        }
     }
 }

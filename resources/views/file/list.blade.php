@@ -12,7 +12,7 @@
 
         <ul class="list-group">
             @foreach ($files as $file)
-                <li class="list-group-item"><a href="{{ $file->url }}">{{ $file->file_name }}</a> ({{ $file->size }} bytes)</li>
+                <li class="list-group-item"><a href="/file/{{ $file->id }}">{{ $file->file_name }}</a> ({{ $file->size }} bytes)</li>
             @endforeach
         </ul>
     </main>

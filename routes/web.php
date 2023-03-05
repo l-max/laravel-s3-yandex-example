@@ -19,3 +19,5 @@ Route::get('/', [FileController::class, 'list']);
 Route::get('/upload-file', [FileController::class, 'show']);
 
 Route::post('/upload-file', [FileController::class, 'store']);
+
+Route::get('/file/{file}', [FileController::class, 'getFile']);
